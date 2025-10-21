@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card card-cyber">
+            <div class="card-header bg-info text-white">
+                <h4><i class="fas fa-cog"></i> Configuración del Sistema</h4>
+            </div>
+            <div class="card-body">
+                <!-- Configuración OpenAI -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-key"></i> Configuración OpenAI</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">API Key</label>
+                                    <input type="password" class="form-control" 
+                                           value="{{ config.openai_api_key }}" readonly>
+                                    <small class="form-text text-muted">
+                                        Configurada en variables de entorno
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Estado del Chatbot</label>
+                                    <select class="form-select">
+                                        <option selected>Activado</option>
+                                        <option>Desactivado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración de Seguridad -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-shield-alt"></i> Configuración de Seguridad</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Límite de Usuarios</label>
+                                    <input type="number" class="form-control" value="{{ config.max_users }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Timeout de Sesión (min)</label>
+                                    <input type="number" class="form-control" value="{{ config.session_timeout }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Backup Automático</label>
+                                    <select class="form-select">
+                                        <option {% if config.backup_frequency == 'daily' %}selected{% endif %}>Diario</option>
+                                        <option {% if config.backup_frequency == 'weekly' %}selected{% endif %}>Semanal</option>
+                                        <option {% if config.backup_frequency == 'monthly' %}selected{% endif %}>Mensual</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones del Sistema -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-tools"></i> Acciones del Sistema</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-warning w-100 mb-2">
+                                    <i class="fas fa-download"></i> Backup Manual
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-info w-100 mb-2">
+                                    <i class="fas fa-broom"></i> Limpiar Cache
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-danger w-100 mb-2">
+                                    <i class="fas fa-redo"></i> Reiniciar Sistema
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

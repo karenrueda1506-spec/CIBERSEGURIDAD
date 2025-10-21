@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-cyber mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="fas fa-graduation-cap"></i> Perfil Estudiante</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Usuario:</strong> {{ session.username }}</p>
+                <p><strong>Email:</strong> {{ session.email }}</p>
+                <p><strong>Rol:</strong> Estudiante</p>
+            </div>
+        </div>
+
+        <div class="card card-cyber">
+            <div class="card-header bg-info text-white">
+                <h6><i class="fas fa-lightbulb"></i> Temas Sugeridos</h6>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" data-question="¿Qué es una contraseña segura?">
+                    🔒 Contraseñas seguras
+                </button>
+                <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" data-question="¿Cómo identificar phishing?">
+                    🎣 Detectar phishing
+                </button>
+                <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" data-question="¿Qué es la autenticación de dos factores?">
+                    ⚡ 2FA - Doble factor
+                </button>
+                <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" data-question="¿Cómo proteger mis redes sociales?">
+                    📱 Redes sociales
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card card-cyber">
+            <div class="card-header bg-success text-white">
+                <h5><i class="fas fa-robot"></i> Chatbot de Ciberseguridad</h5>
+            </div>
+            <div class="card-body">
+                <div id="chat-container" style="height: 400px; overflow-y: auto; padding: 15px; margin-bottom: 15px; border-radius: 10px; background: #f8f9fa;">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> ¡Hola! Soy tu asistente de ciberseguridad. Puedo ayudarte con: contraseñas seguras, phishing, autenticación de dos factores y seguridad en redes sociales.
+                    </div>
+                </div>
+
+                <form id="chat-form">
+                    <div class="input-group">
+                        <input type="text" id="user-message" class="form-control" 
+                               placeholder="Escribe tu pregunta sobre ciberseguridad..." required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Enviar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('chat-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    sendMessage();
+});
+
+// Botones de preguntas rápidas
+document.querySelectorAll('.quick-question').forEach(button => {
+    button.addEventListener('click', function() {
+        const question = this.getAttribute('data-question');
+        document.getElementById('user-message').value = question;
+        sendMessage();
+    });
+});
+
+function sendMessage() {
+    const messageInput = document.getElementById('user-message');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addMessageToChat('user', message);
+    messageInput.value = '';
+    
+    // Show loading
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'text-center text-muted';
+    loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> El chatbot está pensando...';
+    document.getElementById('chat-container').appendChild(loadingDiv);
+    document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+    
+    // Send to backend
+    fetch('{{ url_for("student.chat") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Remove loading
+        loadingDiv.remove();
+        
+        if (data.response) {
+            addMessageToChat('bot', data.response);
+        } else if (data.error) {
+            addMessageToChat('bot', 'Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        loadingDiv.remove();
+        addMessageToChat('bot', 'Error de conexión: ' + error);
+    });
+}
+
+function addMessageToChat(sender, message) {
+    const chatContainer = document.getElementById('chat-container');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `mb-3 ${sender === 'user' ? 'text-end' : ''}`;
+    
+    const bubble = document.createElement('div');
+    bubble.className = `d-inline-block p-3 rounded ${
+        sender === 'user' ? 'bg-primary text-white' : 'bg-light border'
+    }`;
+    bubble.style.maxWidth = '70%';
+    bubble.innerHTML = message.replace(/\n/g, '<br>');
+    
+    messageDiv.appendChild(bubble);
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+</script>
+{% endblock %}

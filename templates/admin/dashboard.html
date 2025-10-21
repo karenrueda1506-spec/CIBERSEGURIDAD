@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card card-cyber mb-4">
+            <div class="card-header bg-danger text-white">
+                <h4><i class="fas fa-crown"></i> Panel de Superadministrador</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('admin.list_users') }}" class="text-decoration-none">
+                            <div class="card bg-primary text-white text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-users fa-2x mb-2"></i>
+                                    <h5>Usuarios</h5>
+                                    <p class="mb-0">Gestionar todos los usuarios</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('admin.view_metrics') }}" class="text-decoration-none">
+                            <div class="card bg-success text-white text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-chart-bar fa-2x mb-2"></i>
+                                    <h5>Métricas</h5>
+                                    <p class="mb-0">Ver estadísticas de uso</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('admin.manage_roles') }}" class="text-decoration-none">
+                            <div class="card bg-warning text-dark text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-user-shield fa-2x mb-2"></i>
+                                    <h5>Roles</h5>
+                                    <p class="mb-0">Gestionar permisos</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('admin.system_config') }}" class="text-decoration-none">
+                            <div class="card bg-info text-white text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-cog fa-2x mb-2"></i>
+                                    <h5>Sistema</h5>
+                                    <p class="mb-0">Configuración general</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6><i class="fas fa-tachometer-alt"></i> Métricas Rápidas</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Usuarios totales
+                                        <span class="badge bg-primary rounded-pill">{{ stats.total_users }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Interacciones hoy
+                                        <span class="badge bg-success rounded-pill">{{ stats.today_interactions }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Estudiantes activos
+                                        <span class="badge bg-info rounded-pill">{{ stats.active_students }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6><i class="fas fa-bolt"></i> Acciones Rápidas</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <a href="{{ url_for('admin.create_user') }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-plus"></i> Crear Usuario
+                                    </a>
+                                    <a href="{{ url_for('admin.view_metrics') }}" class="btn btn-outline-success">
+                                        <i class="fas fa-chart-bar"></i> Ver Métricas
+                                    </a>
+                                    <a href="{{ url_for('admin.system_config') }}" class="btn btn-outline-warning">
+                                        <i class="fas fa-cog"></i> Configurar Sistema
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

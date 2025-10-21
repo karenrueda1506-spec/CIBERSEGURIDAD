@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-cyber mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5><i class="fas fa-chalkboard-teacher"></i> Panel Docente</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Usuario:</strong> {{ session.username }}</p>
+                <p><strong>Email:</strong> {{ session.email }}</p>
+                <p><strong>Rol:</strong> Docente/Gestor</p>
+            </div>
+        </div>
+
+        <div class="card card-cyber">
+            <div class="card-header bg-success text-white">
+                <h6><i class="fas fa-plus-circle"></i> Acciones</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary mb-2">
+                        <i class="fas fa-upload"></i> Subir Material
+                    </button>
+                    <button class="btn btn-info mb-2">
+                        <i class="fas fa-question-circle"></i> Agregar FAQ
+                    </button>
+                    <button class="btn btn-secondary mb-2">
+                        <i class="fas fa-chart-bar"></i> Ver Progreso
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card card-cyber mb-4">
+            <div class="card-header bg-info text-white">
+                <h6><i class="fas fa-book"></i> Material Educativo</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">
+                                    <i class="fas fa-inbox"></i> No hay material cargado aún
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-cyber">
+            <div class="card-header bg-primary text-white">
+                <h6><i class="fas fa-comments"></i> Preguntas Frecuentes</h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">¿Qué es una contraseña segura?</h6>
+                            <small class="text-muted">Contraseñas</small>
+                        </div>
+                        <p class="mb-1">Una contraseña segura debe tener al menos 12 caracteres, incluir mayúsculas, minúsculas, números y símbolos.</p>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">¿Cómo identificar phishing?</h6>
+                            <small class="text-muted">Phishing</small>
+                        </div>
+                        <p class="mb-1">Verifica el remitente, busca errores ortográficos y no hagas clic en enlaces sospechosos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
