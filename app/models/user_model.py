@@ -2,12 +2,45 @@
 from database.db_connection import DatabaseConnection
 import hashlib
 import secrets
+import re
 
 class UserModel:
     def __init__(self):
         self.db = DatabaseConnection()
     
+    def validate_email(self, email):
+        """Validar formato de email"""
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        return re.match(pattern, email) is not None
+    
+    def user_exists(self, username, email):
+        """Verificar si usuario o email ya existen"""
+        connection = self.db.get_connection()
+        if connection:
+            try:
+                cursor = connection.cursor()
+                cursor.execute("SELECT id FROM users WHERE username = %s OR email = %s", (username, email))
+                return cursor.fetchone() is not None
+            except Exception as e:
+                print(f"Error checking user existence: {e}")
+                return True
+            finally:
+                cursor.close()
+                connection.close()
+        return True
+    
     def create_user(self, username, email, password, role_id):
+        """Crear usuario con validaciones"""
+        # Validaciones
+        if not self.validate_email(email):
+            raise ValueError("Formato de email inválido")
+        
+        if self.user_exists(username, email):
+            raise ValueError("El usuario o email ya existen")
+        
+        if len(password) < 6:
+            raise ValueError("La contraseña debe tener al menos 6 caracteres")
+        
         connection = self.db.get_connection()
         if connection:
             try:

@@ -31,6 +31,38 @@ def login():
     
     return render_template('auth/login.html')
 
+@auth_bp.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        
+        # Validaciones básicas
+        if not username or not email or not password:
+            flash('Todos los campos son obligatorios.', 'error')
+            return render_template('auth/register.html')
+        
+        if password != confirm_password:
+            flash('Las contraseñas no coinciden.', 'error')
+            return render_template('auth/register.html')
+        
+        if len(password) < 6:
+            flash('La contraseña debe tener al menos 6 caracteres.', 'error')
+            return render_template('auth/register.html')
+        
+        # Crear usuario automáticamente como ESTUDIANTE (role_id = 3)
+        user_id = user_model.create_user(username, email, password, 3)  # 3 = Estudiante
+        
+        if user_id:
+            flash('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.', 'success')
+            return redirect(url_for('auth.login'))
+        else:
+            flash('Error al crear la cuenta. El email o usuario ya existe.', 'error')
+    
+    return render_template('auth/register.html')
+
 @auth_bp.route('/logout')
 def logout():
     session.clear()
